@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
-import CustomInput from "../../components/CustomInput";
+import CustomInput from "@components/CustomInput";
+import { RoutePath } from "@/routes/routes";
 
 const SignupForm = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -70,7 +71,7 @@ const SignupForm = () => {
 
         <p className="text-center mt-3 mb-0">
           Already have an account?{" "}
-          <a href="/login" className="text-decoration-none">
+          <a href={RoutePath.LOGIN} className="text-decoration-none">
             Login
           </a>
         </p>

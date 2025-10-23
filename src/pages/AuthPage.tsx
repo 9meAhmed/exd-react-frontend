@@ -1,15 +1,7 @@
-import {
-  Container,
-  Row,
-  Col,
-
-} from "react-bootstrap";
-
-import { Outlet } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
+import { Outlet } from "react-router";
 
 const AuthPage = () => {
-
-
   return (
     <Container
       fluid
