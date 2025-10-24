@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from "react";
-import AuthPage from "./pages/AuthPage.tsx";
+import useCounter from "@hooks/useCounter.ts";
 
 const App = () => {
-  return <h3>home page</h3>;
+  const { count, increment, decrement, reset } = useCounter();
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
 };
 
 export default App;

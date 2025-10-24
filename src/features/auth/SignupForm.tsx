@@ -2,64 +2,79 @@ import React, { useState } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import CustomInput from "@components/CustomInput";
 import { RoutePath } from "@/routes/routes";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const SignupForm = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required("First Name is required"),
+    lastName: Yup.string().required("Last Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!form.name || !form.email || !form.password) {
-      setError("All fields are required.");
-      setSuccess("");
-      return;
-    }
-
-    // Simulate API call
-    setTimeout(() => {
-      setError("");
-      setSuccess("Account created successfully!");
-    }, 1000);
-  };
   return (
     <Card className="shadow-sm p-4">
       <Card.Body>
         <h3 className="text-center mb-4">Create Account</h3>
 
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
-
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={formik.handleSubmit}>
           <CustomInput
-            name="name"
-            label="Full Name"
-            placeholder="Enter your name"
+            name="firstName"
+            label="First Name"
+            placeholder="Enter your first name"
             type="text"
-            onChange={handleChange}
-            value={form.name}
+            onChange={formik.handleChange}
+            value={formik.values.firstName}
+            isInvalid={!!formik.errors.firstName}
+            validationMsg={formik.errors.firstName || ""}
+          />
+          <CustomInput
+            name="lastName"
+            label="Last Name"
+            placeholder="Enter your last name"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.lastName}
+            isInvalid={!!formik.errors.lastName}
+            validationMsg={formik.errors.lastName || ""}
           />
           <CustomInput
             name="email"
             label="Email"
             placeholder="Enter email address"
             type="email"
-            value={form.email}
-            onChange={handleChange}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            isInvalid={!!formik.errors.email}
+            validationMsg={formik.errors.email || ""}
           />
           <CustomInput
             name="password"
             label="Password"
             placeholder="Create a password"
             type="password"
-            onChange={handleChange}
-            value={form.password}
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            isInvalid={!!formik.errors.password}
+            validationMsg={formik.errors.password || ""}
           />
 
           <div className="d-grid">

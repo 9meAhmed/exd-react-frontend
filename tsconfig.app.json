@@ -40,6 +40,9 @@
       ],
       "@features/*": [
         "src/features/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
       ]
     }
   },

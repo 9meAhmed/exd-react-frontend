@@ -1,4 +1,3 @@
-import react, { ChangeEventHandler } from "react";
 import { Form } from "react-bootstrap";
 
 type CustomInputProps = {
@@ -8,10 +7,21 @@ type CustomInputProps = {
   placeholder?: string;
   type?: string;
   name: string;
+  isInvalid?: boolean;
+  validationMsg?: string;
 };
 
 const CustomInput = (props: CustomInputProps) => {
-  const { type, name, label, value, placeholder, onChange } = props;
+  const {
+    type,
+    name,
+    label,
+    value,
+    placeholder,
+    onChange,
+    isInvalid,
+    validationMsg,
+  } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e);
@@ -26,7 +36,11 @@ const CustomInput = (props: CustomInputProps) => {
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
+        isInvalid={isInvalid}
       />
+      <Form.Control.Feedback type="invalid">
+        {validationMsg}
+      </Form.Control.Feedback>
     </Form.Group>
   );
 };
