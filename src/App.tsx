@@ -1,4 +1,4 @@
-import useCounter from "@hooks/useCounter.ts";
+import useCounter from "@hooks/useCounter";
 
 const App = () => {
   const { count, increment, decrement, reset } = useCounter();
