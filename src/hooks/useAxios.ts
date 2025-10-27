@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+type RequestData = {
+  url: string;
+  method: string;
+  data?: object;
+  params?: object;
+};
+
 // Custom hook for API calls with request cancellation and interceptors
 const useAxios = () => {
   const [response, setResponse] = useState(null);
@@ -9,7 +16,7 @@ const useAxios = () => {
 
   // Create an Axios instance
   const axiosInstance = axios.create({
-    baseURL: "your-base-url", // Replace with your actual base URL
+    baseURL: import.meta.env.VITE_API_BASE_URL,
   });
 
   // Set up request and response interceptors
@@ -52,12 +59,7 @@ const useAxios = () => {
     method,
     data = {},
     params = {},
-  }: {
-    url: string;
-    method: string;
-    data?: object;
-    params?: object;
-  }) => {
+  }: RequestData) => {
     setLoading(true);
     try {
       const result = await axiosInstance({
@@ -67,6 +69,7 @@ const useAxios = () => {
         params: method.toLowerCase() === "get" ? data : params, // For GET requests, use data as query params
         cancelToken: axios.CancelToken.source().token,
       });
+
       setResponse(result.data);
     } catch (error) {
       if (axios.isCancel(error)) {

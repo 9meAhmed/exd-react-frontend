@@ -1,11 +1,23 @@
-import React, { useState } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import CustomInput from "@components/CustomInput";
 import { RoutePath } from "@/routes/routes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import useAxios from "@/hooks/useAxios";
+import { useNavigate } from "react-router";
 
 const SignupForm = () => {
+  const navigate = useNavigate();
+
+  const { response, error, loading, fetchData } = useAxios();
+
+  console.log("Response:", response);
+  if (response) {
+    navigate(RoutePath.AUTH + "/" + RoutePath.LOGIN);
+  } else {
+    console.log(error);
+  }
+
   const validationSchema = Yup.object({
     firstName: Yup.string().required("First Name is required"),
     lastName: Yup.string().required("Last Name is required"),
@@ -25,8 +37,10 @@ const SignupForm = () => {
       password: "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      // alert(JSON.stringify(values, null, 2));
+
+      await fetchData({ url: "register", method: "post", data: values });
     },
   });
 
