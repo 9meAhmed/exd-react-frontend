@@ -1,22 +1,24 @@
-import { Card, Form, Button, Alert } from "react-bootstrap";
+import { Card, Form, Button } from "react-bootstrap";
 import CustomInput from "@components/CustomInput";
 import { RoutePath } from "@/routes/routes";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAxios from "@/hooks/useAxios";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const SignupForm = () => {
   const navigate = useNavigate();
 
   const { response, error, loading, fetchData } = useAxios();
 
-  console.log("Response:", response);
-  if (response) {
-    navigate(RoutePath.AUTH + "/" + RoutePath.LOGIN);
-  } else {
-    console.log(error);
-  }
+  useEffect(() => {
+    if (response) {
+      navigate("/" + RoutePath.AUTH + "/" + RoutePath.OTP, {
+        state: { user: response },
+      });
+    }
+  }, [response, navigate]);
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required("First Name is required"),

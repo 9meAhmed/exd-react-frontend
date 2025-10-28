@@ -3,6 +3,7 @@ export const RoutePath = {
   AUTH: "auth",
   LOGIN: "login",
   REGISTER: "register",
+  OTP: "otp",
 } as const;
 
 export type RoutePath = (typeof RoutePath)[keyof typeof RoutePath];

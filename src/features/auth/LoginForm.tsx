@@ -1,57 +1,79 @@
-import React, { useState } from "react";
-import { Card, Form, Button, Alert } from "react-bootstrap";
+import { Card, Form, Button } from "react-bootstrap";
 import CustomInput from "@components/CustomInput";
 import { RoutePath } from "@/routes/routes";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import useAxios from "@/hooks/useAxios";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const LoginForm = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const loginApi = useAxios();
+  const appointmentApi = useAxios();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  if (loginApi.error) {
+    console.log("Login error:", loginApi.error);
+  }
 
-    if (!form.name || !form.email || !form.password) {
-      setError("All fields are required.");
-      setSuccess("");
-      return;
+  useEffect(() => {
+    if (loginApi.response) {
+      console.log("Login successful:", loginApi.response);
+      appointmentApi.fetchData({ url: "appointment", method: "get" });
     }
+  }, [loginApi.response, navigate]);
 
-    // Simulate API call
-    setTimeout(() => {
-      setError("");
-      setSuccess("Account created successfully!");
-    }, 1000);
-  };
+  useEffect(() => {
+    if (appointmentApi.response) {
+      console.log("Appointment successful:", appointmentApi.response);
+    }
+  }, [appointmentApi.response, navigate]);
+
+  useEffect(() => {
+    if (loginApi.error) {
+      console.log("Login error:", loginApi.error);
+    }
+  }, [loginApi.error, navigate]);
+
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string().required("Password is required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      await loginApi.fetchData({ url: "login", method: "post", data: values });
+    },
+  });
   return (
     <Card className="shadow-sm p-4">
       <Card.Body>
         <h3 className="text-center mb-4">Login Account</h3>
 
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
-
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={formik.handleSubmit}>
           <CustomInput
             name="email"
             label="Email"
             placeholder="Enter email address"
             type="email"
-            value={form.email}
-            onChange={handleChange}
+            value={formik.values.email}
+            onChange={formik.handleChange}
           />
           <CustomInput
             name="password"
             label="Password"
             placeholder="Create a password"
             type="password"
-            onChange={handleChange}
-            value={form.password}
+            onChange={formik.handleChange}
+            value={formik.values.password}
           />
 
           <div className="d-grid">

@@ -17,6 +17,7 @@ const useAxios = () => {
   // Create an Axios instance
   const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
+    withCredentials: true,
   });
 
   // Set up request and response interceptors
@@ -38,7 +39,26 @@ const useAxios = () => {
       console.log("Received response from:", response.config.url);
       return response;
     },
-    (error) => {
+    async (error) => {
+      console.log("previous request", error.config);
+      const prevRequest = error?.config;
+
+      if (
+        (error?.response?.status === 403 || error?.response?.status === 401) &&
+        !prevRequest._retry
+      ) {
+        prevRequest._retry = true;
+
+        try {
+          await axiosInstance.post("/refresh", {}, { withCredentials: true });
+
+          return axiosInstance(prevRequest);
+        } catch (refreshError) {
+          console.error("Refresh token failed:", refreshError);
+          return Promise.reject(refreshError);
+        }
+      }
+
       // Handle response error here
       return Promise.reject(error);
     }
