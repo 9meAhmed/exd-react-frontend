@@ -6,6 +6,8 @@ import LoginForm from "@features/auth/LoginForm";
 import SignupForm from "@features/auth/SignupForm";
 import OtpForm from "@features/auth/OtpForm";
 import { RoutePath } from "./routes";
+import ForgotPasswordForm from "@/features/auth/ForgotPasswordForm";
+import ResetPasswordForm from "@/features/auth/ResetPasswordForm";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,8 @@ const router = createBrowserRouter([
       { path: RoutePath.LOGIN, Component: LoginForm },
       { path: RoutePath.REGISTER, Component: SignupForm },
       { path: RoutePath.OTP, Component: OtpForm },
+      { path: RoutePath.FORGOT_PASSWORD, Component: ForgotPasswordForm },
+      { path: RoutePath.RESET_PASSWORD, Component: ResetPasswordForm },
     ],
   },
 ]);

@@ -9,6 +9,7 @@ type CustomInputProps = {
   name: string;
   isInvalid?: boolean;
   validationMsg?: string;
+  ref?: string;
 };
 
 const CustomInput = (props: CustomInputProps) => {
@@ -21,6 +22,7 @@ const CustomInput = (props: CustomInputProps) => {
     onChange,
     isInvalid,
     validationMsg,
+    ref,
   } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

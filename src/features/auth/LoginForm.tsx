@@ -89,6 +89,13 @@ const LoginForm = () => {
             Signup
           </a>
         </p>
+
+        <p className="text-center mt-3 mb-0">
+          Forgot Password?{" "}
+          <a href={RoutePath.FORGOT_PASSWORD} className="text-decoration-none">
+            Reset it
+          </a>
+        </p>
       </Card.Body>
     </Card>
   );
