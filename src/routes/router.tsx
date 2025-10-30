@@ -8,11 +8,12 @@ import OtpForm from "@features/auth/OtpForm";
 import { RoutePath } from "./routes";
 import ForgotPasswordForm from "@/features/auth/ForgotPasswordForm";
 import ResetPasswordForm from "@/features/auth/ResetPasswordForm";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
-    path: RoutePath.HOME,
-    Component: App,
+    Component: ProtectedRoute,
+    children: [{ path: "/", element: <App /> }],
   },
   {
     path: RoutePath.AUTH,

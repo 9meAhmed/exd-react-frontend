@@ -1,14 +1,10 @@
-import useCounter from "@hooks/useCounter";
+import { useAuth } from "./context/AuthContext";
 
 const App = () => {
-  const { count, increment, decrement, reset } = useCounter();
-
+  const { user } = useAuth();
   return (
     <div>
-      <p>Count: {count}</p>
-      <button onClick={increment}>Increment</button>
-      <button onClick={decrement}>Decrement</button>
-      <button onClick={reset}>Reset</button>
+      <p>User: {user ? user.email : "No user logged in"}</p>
     </div>
   );
 };

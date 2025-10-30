@@ -12,7 +12,7 @@ type RequestData = {
 const useAxios = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Create an Axios instance
   const axiosInstance = axios.create({
@@ -49,14 +49,14 @@ const useAxios = () => {
       ) {
         prevRequest._retry = true;
 
-        try {
-          await axiosInstance.post("/refresh", {}, { withCredentials: true });
+        // try {
+        //   await axiosInstance.post("/refresh", {}, { withCredentials: true });
 
-          return axiosInstance(prevRequest);
-        } catch (refreshError) {
-          console.error("Refresh token failed:", refreshError);
-          return Promise.reject(refreshError);
-        }
+        //   return axiosInstance(prevRequest);
+        // } catch (refreshError) {
+        //   console.error("Refresh token failed:", refreshError);
+        //   return Promise.reject(refreshError);
+        // }
       }
 
       // Handle response error here

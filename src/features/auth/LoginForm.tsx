@@ -5,10 +5,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAxios from "@/hooks/useAxios";
 import { useNavigate } from "react-router";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import Swal from "sweetalert2";
+import { useAuth } from "@/context/AuthContext";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useAuth();
 
   const loginApi = useAxios();
   const appointmentApi = useAxios();
@@ -20,7 +23,9 @@ const LoginForm = () => {
   useEffect(() => {
     if (loginApi.response) {
       console.log("Login successful:", loginApi.response);
-      appointmentApi.fetchData({ url: "appointment", method: "get" });
+      setUser((loginApi.response as any).user);
+      navigate("/");
+      // appointmentApi.fetchData({ url: "appointment", method: "get" });
     }
   }, [loginApi.response, navigate]);
 
@@ -32,7 +37,11 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (loginApi.error) {
-      console.log("Login error:", loginApi.error);
+      Swal.fire({
+        icon: "error",
+        title: "Login failed",
+        text: "Please check your credentials and try again.",
+      });
     }
   }, [loginApi.error, navigate]);
 
@@ -56,7 +65,9 @@ const LoginForm = () => {
   return (
     <Card className="shadow-sm p-4">
       <Card.Body>
-        <h3 className="text-center mb-4">Login Account</h3>
+        <h3 className="text-center mb-4">
+          Login Account {user ? user?.user?.email : "No user logged in"}
+        </h3>
 
         <Form onSubmit={formik.handleSubmit}>
           <CustomInput
